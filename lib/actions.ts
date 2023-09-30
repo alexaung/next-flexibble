@@ -50,7 +50,7 @@ export const uploadImage = async (imagePath: string) => {
 
 const makeGraphQLRequest = async (query: string, variables = {}) => {
   try {
-    console.log("Sending variables to GraphQL:", variables);
+    ///console.log("Sending variables to GraphQL:", variables);
 
     return await client.request(query, variables);
   } catch (err) {
