@@ -29,6 +29,11 @@ export const authOptions: NextAuthOptions = {
       return encodedToken;
     },
     decode: async ({ secret, token }) => {
+      console.log("Decoding token: ", token);
+      console.log("Decoding secret: ", secret);
+      if (!token) {
+        throw new Error("No token provided");
+      }
       const decodedToken = jsonwebtoken.verify(token!, secret);
       return decodedToken as JWT;
     },

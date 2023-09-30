@@ -1,4 +1,5 @@
 import { g, config, auth } from '@grafbase/sdk';
+import 'dotenv/config';
 
 // @ts-ignore
 const User = g.model('User', {

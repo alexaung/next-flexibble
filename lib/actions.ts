@@ -50,20 +50,29 @@ export const uploadImage = async (imagePath: string) => {
 
 const makeGraphQLRequest = async (query: string, variables = {}) => {
   try {
+    console.log("Sending variables to GraphQL:", variables);
+
     return await client.request(query, variables);
   } catch (err) {
     throw err;
   }
 };
 
-export const fetchAllProjects = (
-  category?: string | null,
-  endcursor?: string | null
-) => {
+export const fetchAllProjects = (category?: string | null, endcursor?: string | null) => {
   client.setHeader("x-api-key", apiKey);
 
-  return makeGraphQLRequest(projectsQuery, { category, endcursor });
+  if (!category) category = "Frontend";  // Replace 'defaultCategory' with your default value
+
+  // Construct the variables object:
+  const variables: any = {};
+  if (category) variables.category = category;
+  if (endcursor) variables.endcursor = endcursor;
+
+  // Send the request:
+  return makeGraphQLRequest(projectsQuery, variables);
 };
+
+
 
 export const createNewProject = async (
   form: ProjectForm,
@@ -154,3 +163,4 @@ export const getUser = (email: string) => {
   client.setHeader("x-api-key", apiKey);
   return makeGraphQLRequest(getUserQuery, { email });
 };
+  
