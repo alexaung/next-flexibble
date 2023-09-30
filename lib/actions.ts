@@ -9,6 +9,7 @@ import {
   getProjectsOfUserQuery,
   getUserQuery,
   projectsQuery,
+  projectsQueryAll
 } from "@/graphql";
 import { ProjectForm } from "@/common.types";
 
@@ -50,8 +51,6 @@ export const uploadImage = async (imagePath: string) => {
 
 const makeGraphQLRequest = async (query: string, variables = {}) => {
   try {
-    ///console.log("Sending variables to GraphQL:", variables);
-
     return await client.request(query, variables);
   } catch (err) {
     throw err;
@@ -61,15 +60,12 @@ const makeGraphQLRequest = async (query: string, variables = {}) => {
 export const fetchAllProjects = (category?: string | null, endcursor?: string | null) => {
   client.setHeader("x-api-key", apiKey);
 
-  if (!category) category = "Frontend";  // Replace 'defaultCategory' with your default value
-
-  // Construct the variables object:
-  const variables: any = {};
-  if (category) variables.category = category;
-  if (endcursor) variables.endcursor = endcursor;
+  if (!category) {
+    return makeGraphQLRequest(projectsQueryAll);
+  }
 
   // Send the request:
-  return makeGraphQLRequest(projectsQuery, variables);
+  return makeGraphQLRequest(projectsQuery, { category, endcursor });
 };
 
 
@@ -163,4 +159,3 @@ export const getUser = (email: string) => {
   client.setHeader("x-api-key", apiKey);
   return makeGraphQLRequest(getUserQuery, { email });
 };
-  
